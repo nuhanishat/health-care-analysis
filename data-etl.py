@@ -1,8 +1,11 @@
 import pandas as pd
+import sqlite3
 from handler_funcs import convert_numberobj_to_float
 
-# Load file into dataframe
-df = pd.read_csv('sampled_medical_data.csv', low_memory=False)
+## Load file into pandas dataframe to clean and transform data
+
+# Read data into pandas dataframe
+df = pd.read_csv('sampled_medicare_data.csv', low_memory=False)
 
 # Rename colums to readable and SQL-friendly headings
 df.rename(columns = { 'Rndrng_NPI': 'national_provider_identifier', 
@@ -35,9 +38,9 @@ df.rename(columns = { 'Rndrng_NPI': 'national_provider_identifier',
                     'Avg_Mdcr_Stdzd_Amt' : 'average_medicare_standard_pay'}, inplace=True)
 
 
-print(df.info())
-print(df.shape)
-print(df.columns)
+# print(df.info())
+# print(df.shape)
+# print(df.columns)
 
 # Change the number amounts to numeric float type 
 
@@ -49,4 +52,59 @@ df = convert_numberobj_to_float(df, 'average_medicare_allowed_amount')
 df = convert_numberobj_to_float(df, 'average_medicare_payment_amount')
 df = convert_numberobj_to_float(df, 'average_medicare_standard_pay')
 
-print(df.info())
+# print(df.info())
+
+#***********************************************************************************
+
+## Create and load data in a SQL database
+
+# Create database filename
+database_file = 'medicare_database.db'
+
+# Create the file and connect to sqlite 
+sql_connect = sqlite3.connect(database_file)
+
+# Cursor object to execute sql commands
+cursor = sql_connect.cursor()
+
+print("[SQL] Connected to the database successfully!")
+
+# Create the sql table
+create_table_sql = """
+CREATE TABLE medical_database (
+    national_provider_identifier INTEGER PRIMARY KEY, 
+    provider_last_org_name TEXT, 
+    provider_first_name TEXT,
+    provider_middle_name_initial TEXT,
+    provider_credentials TEXT,
+    provider_entity_type TEXT,
+    provider_street_address_1 TEXT,
+    provider_street_address_2 TEXT,
+    provider_city TEXT,
+    provider_state_abbreviation TEXT,
+    provider_fips_code TEXT,
+    provider_zip_code TEXT,
+    provider_ruca_code REAL,
+    provider_ruca_description TEXT,
+    provider_country TEXT,
+    provider_type TEXT,
+    provider_medicare_participation_indicator TEXT,
+    hcpcs_code TEXT,
+    hcpcs_description TEXT,
+    hcpcs_drug_indicator TEXT,
+    place_of_service TEXT,
+    number_of_beneficiaries INTEGER,
+    number_of_services REAL,
+    number_of_unique_beneficiary_services INTEGER,
+    average_submitted_charge_amount REAL,
+    average_medicare_allowed_amount REAL,
+    average_medicare_payment_amount REAL,
+    average_medicare_standard_pay REAL
+);
+"""
+
+# Execute CREATE TABLE in database
+cursor.execute(create_table_sql)
+sql_connect.commit()
+
+print("[SQL] Table created successfully!")
