@@ -7,6 +7,9 @@ from handler_funcs import convert_numberobj_to_float
 # Read data into pandas dataframe
 df = pd.read_csv('sampled_medicare_data.csv', low_memory=False)
 
+
+
+
 # Rename colums to readable and SQL-friendly headings
 df.rename(columns = { 'Rndrng_NPI': 'national_provider_identifier', 
                     'Rndrng_Prvdr_Last_Org_Name' : 'provider_last_org_name', 
@@ -42,6 +45,11 @@ df.rename(columns = { 'Rndrng_NPI': 'national_provider_identifier',
 # print(df.shape)
 # print(df.columns)
 
+# Remove duplicate rows for national_provider_identifier
+df.drop_duplicates(subset=['national_provider_identifier'], keep='first', inplace=True)
+print('Duplicates removed!')
+
+
 # Change the number amounts to numeric float type 
 
 df = convert_numberobj_to_float(df, 'average_submitted_charge_amount')
@@ -71,7 +79,7 @@ print("[SQL] Connected to the database successfully!")
 
 # Create the sql table
 create_table_sql = """
-CREATE TABLE medical_database (
+CREATE TABLE medicare_database (
     national_provider_identifier INTEGER PRIMARY KEY, 
     provider_last_org_name TEXT, 
     provider_first_name TEXT,
@@ -108,3 +116,12 @@ cursor.execute(create_table_sql)
 sql_connect.commit()
 
 print("[SQL] Table created successfully!")
+
+print(len(df))
+
+df.to_sql('medicare_database', sql_connect, if_exists='append', index=False, chunksize=len(df))
+
+print("[SQL] Data loaded successfully!")
+
+#Close the connection to the database
+sql_connect.close()
