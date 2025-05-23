@@ -69,3 +69,5 @@ def generate_pie_chart_for_proc_by_state(sql_connect):
 
 
 generate_pie_chart_for_proc_by_state(sql_connect)
+
+sql_connect.close()
