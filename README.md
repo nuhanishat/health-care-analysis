@@ -64,6 +64,10 @@ The four states California, Florida, New York and Texas consistently had higher 
 The dataset is incomplete to accurately understand what is driving the high volume and consequently high cost for established patient visits since this is the type of service with the highest spending utilization. It is important to expand the current dataset to include additional data points on both patient, providers and the procedure performed, in compliance with all privacy and legal obligations. This can show further insights to see if the current findings are valid and more actions that can be taken to understand these high costs and find ways to reduce it. 
 
 ### 2. Targeted Audit of E/M Coding Practisces in High-Volume States:
+Conduct a focused audit of Evaluation and Management (E/M) coding practices for established patient visits within Internal Medicine, Family Practice, and other top specialties in California, Texas, Florida, and New York. Given that these four states consistently exhibit high volumes of established patient visits across multiple specialties, there is a potential for inefficiencies or inconsistencies in coding practices that are contributing to higher overall costs. This audit should examine if there is possibilites of "upcoding" - are providers consistently billing for higher E/M codes than are justified by the complexity of services provided. Is the documentation in patient records sufficient to support these E/M coding?
+
+The audit will help identify areas where coding practices can be improved, leading to more accurate billing, reduced costs, and improved compliance.
+
 
 
 
